@@ -57,15 +57,25 @@ app.get('/search', (req, res) => {
 app.get('/restaurants/new', (req, res) => {
      res.render('new')
   })
-//瀏覽特定餐廳
+
+  //瀏覽特定餐廳
 app.get('/restaurants/:restaurant_id', (req, res) => {
   const {restaurant_id} = req.params
-  console.log(restaurant_id)
-  RList.findById(restaurant_id)
+    RList.findById(restaurant_id)
     .lean()
     .then(restaurant => res.render('show', { restaurant }))//注意傳進去的變數要與樣板一致
     .catch(error => console.log(error))
  
+})
+
+//編輯餐廳
+app.get('/restaurants/:restaurant_id/edit', (req, res) => {
+  const {restaurant_id} = req.params
+  
+  RList.findById(restaurant_id)
+    .lean()
+    .then(restaurant => res.render('edit', { restaurant }))
+    .catch(error => console.log(error))
 })
 
 //新增餐廳
@@ -73,6 +83,21 @@ app.post('/restaurants', (req, res) => {
     
     return RList.create(req.body)     // 存入資料庫
       .then(() => res.redirect('/')) // 新增完成後導回首頁
+      .catch(error => console.log(error))
+  })
+
+//儲存新編輯
+app.post('/restaurants/:restaurant_id/edit', (req, res) => {
+    const {restaurant_id} = req.params
+    const name = req.body.name
+    console.log(name)
+    console.log(restaurant_id)
+    RList.findById(restaurant_id)
+      .then( restaurant => {
+        restaurant.name = name
+        restaurant.save()
+      })
+      .then(()=> res.redirect('/'))
       .catch(error => console.log(error))
   })
  
