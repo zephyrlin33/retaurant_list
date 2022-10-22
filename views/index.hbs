@@ -32,6 +32,8 @@
 <!-- restaurant list -->
 <div class="container mt-5">
   <a href="./restaurants/new">新增餐廳</a>
+  
+  
   <div class="row">
     {{#each restaurants}}
     <div class="col-md-4 mx-auto ">
@@ -50,7 +52,9 @@
                <div> {{this.rating}}<i class="fas fa-star fa-xs"></i></div>
                <a href="/restaurants/{{this._id}}/edit">Edit</a>
               </span>
-
+              <form action="/restaurants/{{ this._id }}/delete" method="POST" style="display">
+                  <button type="submit" class="btn btn-outline-danger">delete</button>
+              </form>
             </div>
           </div>
         </a>

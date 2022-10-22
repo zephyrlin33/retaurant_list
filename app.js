@@ -90,8 +90,6 @@ app.post('/restaurants', (req, res) => {
 app.post('/restaurants/:restaurant_id/edit', (req, res) => {
     const {restaurant_id} = req.params
     const name = req.body.name
-    console.log(name)
-    console.log(restaurant_id)
     RList.findById(restaurant_id)
       .then( restaurant => {
         restaurant.name = name
@@ -100,6 +98,15 @@ app.post('/restaurants/:restaurant_id/edit', (req, res) => {
       .then(()=> res.redirect('/'))
       .catch(error => console.log(error))
   })
+
+  // 刪除餐廳
+app.post("/restaurants/:restaurant_id/delete", (req, res) => {
+  const { restaurant_id } = req.params
+  RList.findById (restaurant_id)
+    .then(restaurants => restaurants.remove())
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
+})
  
   // start and listen on the Express server
 app.listen(port, () => {
